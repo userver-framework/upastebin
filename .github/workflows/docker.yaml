@@ -27,9 +27,6 @@ jobs:
                     ccache-dir-${{github.ref}}_run-
                     ccache-
 
-          - name: Setup ccache
-            run: docker-compose run --rm upastebin-container bash -c 'ccache -M 2.0GB && ccache -s'
-
           - name: Cmake
             run: make docker-cmake-release
 
