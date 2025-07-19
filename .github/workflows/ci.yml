@@ -46,6 +46,7 @@ jobs:
             run: |
                 (cd third_party && git clone -b develop --single-branch --depth 1 https://github.com/userver-framework/userver.git)
                 sudo apt update
+                sudo apt purge -y libpq5 libpq-dev postgresql-*
                 sudo apt install --allow-downgrades -y postgresql $(cat third_party/userver/scripts/docs/en/deps/${{matrix.os}}.md | tr '\n' ' ')
                 python3 -m pip install -r requirements.txt
 
