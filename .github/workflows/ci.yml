@@ -17,11 +17,11 @@ jobs:
             fail-fast: false
             matrix:
                 include:
-                  - os: ubuntu-20.04
+                  - os: ubuntu-24.04
                     make: test-debug
                     info: g++-9 + test-debug
 
-                  - os: ubuntu-20.04
+                  - os: ubuntu-24.04
                     make: test-release
                     info: g++-9 + test-release
 
