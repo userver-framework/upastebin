@@ -1,6 +1,9 @@
 # upastebin
 
-A C++ service that uses [userver framework](https://github.com/userver-framework/userver) with PostgreSQL.
+[![upastebin CI](https://github.com/userver-framework/upastebin/actions/workflows/ci.yml/badge.svg?branch=develop)](https://github.com/userver-framework/upastebin/actions/workflows/ci.yml)
+[![upastebin Docker](https://github.com/userver-framework/upastebin/actions/workflows/docker.yaml/badge.svg?branch=develop)](https://github.com/userver-framework/upastebin/actions/workflows/docker.ymal)
+
+A C++ service that uses [userver framework](https://github.com/userver-framework/userver) with PostgreSQL. See [the article (ru)](https://habr.com/ru/companies/yandex/articles/894294/) for in depth description.
 
 
 ## Download and Build
