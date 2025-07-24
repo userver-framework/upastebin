@@ -17,11 +17,11 @@ jobs:
             fail-fast: false
             matrix:
                 include:
-                  - os: ubuntu-20.04
+                  - os: ubuntu-24.04
                     make: test-debug
                     info: g++-9 + test-debug
 
-                  - os: ubuntu-20.04
+                  - os: ubuntu-24.04
                     make: test-release
                     info: g++-9 + test-release
 
@@ -29,12 +29,12 @@ jobs:
         runs-on: ${{matrix.os}}
 
         steps:
-          - uses: actions/checkout@v2
+          - uses: actions/checkout@v4
             with:
                 submodules: true
 
           - name: Reuse ccache directory
-            uses: actions/cache@v2
+            uses: actions/cache@v4
             with:
                 path: ~/.ccache
                 key: '${{matrix.os}} ${{matrix.info}} ccache-dir ${{github.ref}} run-${{github.run_number}}'
@@ -46,6 +46,7 @@ jobs:
             run: |
                 (cd third_party && git clone -b develop --single-branch --depth 1 https://github.com/userver-framework/userver.git)
                 sudo apt update
+                sudo apt purge -y libpq5 libpq-dev postgresql-*
                 sudo apt install --allow-downgrades -y postgresql $(cat third_party/userver/scripts/docs/en/deps/${{matrix.os}}.md | tr '\n' ' ')
                 python3 -m pip install -r requirements.txt
 
@@ -63,6 +64,8 @@ jobs:
             run: |
                 make dist-clean
                 make install PREFIX=`pwd`/local_installation/
+                sed -i "s|/var/www/upastebin|`pwd`/local_installation/var/www/upastebin|g" \
+                    `pwd`/local_installation/etc/upastebin/static_config.yaml
 
           - name: Test run after install
             if: matrix.make == 'test-release'

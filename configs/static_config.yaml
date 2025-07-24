@@ -34,7 +34,7 @@ components_manager:
         http-client:
             fs-task-processor: fs-task-processor
         resources-cache:
-            dir: /home/segoon/projects/upastebin/www-data
+            dir: /var/www/upastebin
             update-period: 1s
             fs-task-processor: fs-task-processor
 
