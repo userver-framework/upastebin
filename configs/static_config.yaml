@@ -32,6 +32,7 @@ components_manager:
         testsuite-support: {}
 
         http-client:
+        http-client-core:
             fs-task-processor: fs-task-processor
         resources-cache:
             dir: /var/www/upastebin
