@@ -68,7 +68,7 @@ format:
 # and still able to access the results.
 .PHONY: $(addprefix docker-cmake-, $(PRESETS)) $(addprefix docker-build-, $(PRESETS)) $(addprefix docker-test-, $(PRESETS)) $(addprefix docker-clean-, $(PRESETS))
 $(addprefix docker-cmake-, $(PRESETS)) $(addprefix docker-build-, $(PRESETS)) $(addprefix docker-test-, $(PRESETS)) $(addprefix docker-clean-, $(PRESETS)): docker-%:
-	docker run $(DOCKER_ARGS) \
+	docker compose run $(DOCKER_ARGS) \
 		--network=host \
 		-v $$PWD:$$PWD \
 		-w $$PWD \
