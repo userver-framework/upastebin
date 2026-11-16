@@ -23,6 +23,7 @@ services:
           <<: *db_env
           PREFIX: ${PREFIX:-~/.local}
           CCACHE_DIR: /upastebin/.ccache
+          UV_CACHE_DIR: /upastebin/.uv-cache
           CORES_DIR: /cores
         volumes:
           - .:/upastebin:rw
