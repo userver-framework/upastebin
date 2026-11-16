@@ -3,7 +3,7 @@ version: "2.3"
 services:
     postgres:
         container_name: service-postgres
-        image: postgres:12
+        image: postgres:15
         environment: &db_env
           POSTGRES_DB: upastebin_db_1
           POSTGRES_USER: user
