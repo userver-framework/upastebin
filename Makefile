@@ -1,10 +1,7 @@
 PROJECT_NAME = upastebin
 NPROCS ?= $(shell nproc)
 CLANG_FORMAT ?= clang-format
-DOCKER_IMAGE ?= ghcr.io/userver-framework/ubuntu-24.04-userver:latest
 CMAKE_OPTS ?=
-# If we're under TTY, pass "-it" to "docker run"
-DOCKER_ARGS = $(shell /bin/test -t 0 && /bin/echo -it || echo)
 PRESETS ?= debug release debug-custom release-custom
 
 .PHONY: all
@@ -68,11 +65,4 @@ format:
 # and still able to access the results.
 .PHONY: $(addprefix docker-cmake-, $(PRESETS)) $(addprefix docker-build-, $(PRESETS)) $(addprefix docker-test-, $(PRESETS)) $(addprefix docker-clean-, $(PRESETS))
 $(addprefix docker-cmake-, $(PRESETS)) $(addprefix docker-build-, $(PRESETS)) $(addprefix docker-test-, $(PRESETS)) $(addprefix docker-clean-, $(PRESETS)): docker-%:
-	docker compose run $(DOCKER_ARGS) \
-		--network=host \
-		-v $$PWD:$$PWD \
-		-w $$PWD \
-		$(DOCKER_IMAGE) \
-		env CCACHE_DIR=$$PWD/.ccache \
-		    HOME=$$HOME \
-		    $$PWD/run_as_user.sh $(shell /bin/id -u) $(shell /bin/id -g) make $*
+	docker compose run --rm upastebin-container make $*
