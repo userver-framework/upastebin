@@ -3,7 +3,7 @@ version: "2.3"
 services:
     postgres:
         container_name: service-postgres
-        image: postgres:12
+        image: postgres:18
         environment: &db_env
           POSTGRES_DB: upastebin_db_1
           POSTGRES_USER: user
@@ -17,12 +17,13 @@ services:
           - postgres
 
     upastebin-container:
-        image: ghcr.io/userver-framework/ubuntu-22.04-userver-pg:latest
+        image: ghcr.io/userver-framework/ubuntu-24.04-userver:latest
         privileged: true
         environment:
           <<: *db_env
           PREFIX: ${PREFIX:-~/.local}
           CCACHE_DIR: /upastebin/.ccache
+          UV_CACHE_DIR: /upastebin/.uv-cache
           CORES_DIR: /cores
         volumes:
           - .:/upastebin:rw

@@ -3,6 +3,7 @@
 #include <userver/components/component_config.hpp>
 #include <userver/components/component_context.hpp>
 #include <userver/components/fs_cache.hpp>
+#include <userver/utils/overloaded.hpp>
 
 namespace upastebin {
 
@@ -39,11 +40,19 @@ std::string ResourcesHandler::HandleRequestThrow(
   auto file_ptr = fs_client_.TryGetFile("/" + subpath);
   auto& response = request.GetHttpResponse();
   if (file_ptr) {
-    response.SetContentType(GetContentType(file_ptr->extension));
-    response.SetHeader(USERVER_NAMESPACE::http::headers::kExpires, "600");
-    return file_ptr->data;
+    return userver::utils::Visit(
+        file_ptr->data_or_path,
+        [&](const std::string& data) {
+            response.SetContentType(GetContentType(file_ptr->extension));
+            response.SetHeader(USERVER_NAMESPACE::http::headers::kExpires, "600");
+            return data;
+        },
+        [&](const auto& path) {
+            response.SetStatus(userver::server::http::HttpStatus::kPayloadTooLarge);
+            return std::string{};
+        }
+    );
   } else {
-    auto& response = request.GetHttpResponse();
     response.SetStatus(userver::server::http::HttpStatus::kNotFound);
     return {};
   }

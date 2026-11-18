@@ -2,6 +2,7 @@
 
 #include <userver/components/component_context.hpp>
 #include <userver/components/fs_cache.hpp>
+#include <userver/utils/overloaded.hpp>
 
 namespace upastebin {
 
@@ -23,7 +24,14 @@ std::string TextHandler::HandleRequestThrow(
 
   auto& response = request.GetHttpResponse();
   response.SetContentType("text/html; charset=UTF-8");
-  return file_ptr->data;
+  return userver::utils::Visit(
+      file_ptr->data_or_path,
+      [](const std::string& data) { return data; },
+      [&response](const auto& path) {
+          response.SetStatus(userver::server::http::HttpStatus::kPayloadTooLarge);
+          return std::string{};
+      }
+  );
 }
 
 }  // namespace upastebin
